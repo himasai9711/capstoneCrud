@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Employee Form</h1>
+    <form action="/form" method="post">
+
+        ID:
+        <input type="text" name = 'id' required >
+        <br> <br>
+
+        name:
+        <input type="text" name = 'name'>
+        <br><br>
+
+        address:
+        <textarea name="address"  cols="40" rows="5" type="text"></textarea> 
+        <br><br>
+        <label for="cars">city</label>
+
+        <select name="city" id="city">
+        <option value="hyderabad">hyderabad</option>
+        <option value="delhi">delhi</option>
+        <option value="jaipur">jaipur</option>
+        <option value="chennai">chennai</option>
+        </select>
+        <br><br>
+        Gender:
+        <br><br>
+        <input type="radio" id="html" name="gender" value="male">
+        <label >male</label><br>
+        <input type="radio"  name="gender" value="female">
+        <label for="female">female</label><br>
+        <br><br>
+        vehicles:
+        <br><br>
+        <input type="checkbox" name="vehicle1" value="Bike">
+        <label for="vehicle1">bike</label><br>
+        <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+        <label for="vehicle2">car</label><br>
+        <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+        <label for="vehicle3">boat</label><br>
+        <br>
+        Employee Image:
+        <br><br>
+        <input type="file" name="files[]" id="files">
+        <input type="hidden" name="url" id="url">
+        <button type="button" onclick="uploadimage()">upload</button><br><br>
+        <input type="submit" value="submit">
+
+    </form>
+</body>
+<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+<script>
+    const config = {
+  
+  
+  databaseURL: '"https://capstone-81b38.firebaseio.com',
+  
+  apiKey: "AIzaSyCqzDUHETQv-qvDD9zLEet-7hn0oKvhrok",
+  authDomain: "capstone-81b38.firebaseapp.com",
+  projectId: "capstone-81b38",
+  storageBucket: "capstone-81b38.appspot.com",
+  messagingSenderId: "637472332746",
+  appId: "1:637472332746:web:bbb9201c5c0c0b17084d33",
+  measurementId: "G-R83JTRQ8VP"
+};
+ firebase.initializeApp(config);
+
+// Get a reference to the storage service, which is used to create references in your storage bucket
+function uploadimage(){
+    const storage = firebase.storage()
+    var file = document.getElementById("files").files[0]
+    var storageRef = storage.ref()
+    var thisRef = storageRef.child(file.name).put(file)
+
+    thisRef.on('state_changed',function(snapshot){
+        console.log("file uploaded")
+    },
+    (error) => {
+
+
+    },
+
+    () => {
+    // Upload completed successfully, now we can get the download URL
+   var downloadURL = thisRef.snapshot.downloadURL ;
+      console.log('File available at', downloadURL);
+      document.getElementById("url").value = downloadURL
+      alert('file uploaded successfully')
+    });
+  
+
+
+}
+
+</script>
+</html>
